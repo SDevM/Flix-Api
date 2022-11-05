@@ -1,12 +1,12 @@
-const intemBucketModel = require('../../../lib/db/models/item.bucket.model')
-const itemModel = require('../../../lib/db/models/item.model')
+const movieBucketModel = require('../../../lib/db/models/movie.bucket.model')
+const movieModel = require('../../../lib/db/models/movie.model')
 const JSONResponse = require('../../../lib/json.helper')
 
-class itemsController {
-	// TODO Research into populate, in order to fill item references in the bucket
+class moviesController {
+	// TODO Research into populate, in order to fill movie references in the bucket
 	//Read
 	/**
-	 * Get collective items
+	 * Get collective movies
 	 * @param {import('express').Request} req
 	 * @param {import('express').Response} res
 	 */
@@ -21,7 +21,7 @@ class itemsController {
 					filterBody[e] = value[index]
 				})
 			}
-			const list = await intemBucketModel
+			const list = await movieBucketModel
 				.findOne({
 					customID: { step: bucket, details: new Map(Object.entries(filterBody)) },
 				})
@@ -39,30 +39,30 @@ class itemsController {
 	}
 
 	/**
-	 * Get an item by ID
+	 * Get an movie by ID
 	 * @param {import('express').Request} req
 	 * @param {import('express').Response} res
 	 */
 	static async getOne(req, res) {
 		let id = req.params.id
-		let item = await itemModel.findById(id).catch((err) => {
+		let movie = await movieModel.findById(id).catch((err) => {
 			JSONResponse.error(req, res, 500, 'Database Error', err)
 		})
-		if (item) {
-			JSONResponse.success(req, res, 200, 'Collected matching document', item)
+		if (movie) {
+			JSONResponse.success(req, res, 200, 'Collected matching document', movie)
 		} else JSONResponse.error(req, res, 404, 'Could not find any matching documents')
 	}
 
 	// TODO Include buckets interactions
 	//Create
 	/**
-	 * Create a new item
+	 * Create a new movie
 	 * @param {import('express').Request} req
 	 * @param {import('express').Response} res
 	 */
 	static async add(req, res) {
 		let body = req.body
-		let newdoc = new itemModel(body)
+		let newdoc = new movieModel(body)
 		let dupe = await newdoc.checkDupe()
 		if (dupe) {
 			JSONResponse.error(req, res, 409, 'Duplicate document')
@@ -91,13 +91,13 @@ class itemsController {
 
 	//Delete
 	/**
-	 * Erase an item by ID
+	 * Erase an movie by ID
 	 * @param {import('express').Request} req
 	 * @param {import('express').Response} res
 	 */
 	static async destroy(req, res) {
 		let id = req.params.id
-		const olddoc = await itemModel.findByIdAndDelete(id).catch((err) => {
+		const olddoc = await movieModel.findByIdAndDelete(id).catch((err) => {
 			JSONResponse.error(req, res, 500, 'Database Error', err)
 		})
 
@@ -110,14 +110,14 @@ class itemsController {
 
 	//Update
 	/**
-	 * Update an item by ID
+	 * Update an movie by ID
 	 * @param {import('express').Request} req
 	 * @param {import('express').Response} res
 	 */
 	static async update(req, res) {
 		let id = req.params.id
 		let body = req.body
-		const newdoc = await itemModel.findByIdAndUpdate(id, body).catch((err) => {
+		const newdoc = await movieModel.findByIdAndUpdate(id, body).catch((err) => {
 			JSONResponse.error(req, res, 500, 'Database Error', err)
 		})
 		if (newdoc) {
@@ -128,4 +128,4 @@ class itemsController {
 	}
 }
 
-module.exports = itemsController
+module.exports = moviesController

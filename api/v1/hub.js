@@ -3,7 +3,7 @@ const multer = require('multer')
 const JSONResponse = require('../../lib/json.helper')
 const S3Helper = require('../../lib/s3.helper')
 const adminsController = require('./controllers/admins.controller')
-const itemsController = require('./controllers/items.controller')
+const moviesController = require('./controllers/movies.controller')
 const upload = multer()
 const userController = require('./controllers/users.controller')
 const typeCheck = require('./middleware/typeCheck.middleware')
@@ -38,8 +38,8 @@ router.all('', (req, res) => {
 		PATCH any user by ID
 		DELETE any user by ID`,
 		`Route for managing logins and session resumption for admins.`,
-		`Route for collecting all items or (admin)creating an item.`,
-		`Administrative management of items via IDs.`,
+		`Route for collecting all movies or (admin)creating an item.`,
+		`Administrative management of movies via IDs.`,
 		`Destroy the session and thereby log-out.`,
 	]
 	let body = {
@@ -72,15 +72,15 @@ router
 router.route('/admins').post(adminsController.signIn).get(adminsController.session)
 
 router
-	.route('/items')
-	.get(itemsController.get)
+	.route('/movies')
+	.get(moviesController.get)
 	.all(typeCheck(['admin']))
-	.post(upload.single('image'), itemsController.add)
+	.post(upload.single('image'), moviesController.add)
 router
-	.route('/items/:id(^[a-fA-Fd]{24}$)')
+	.route('/movies/:id(^[a-fA-Fd]{24}$)')
 	.all(typeCheck(['admin']))
-	.patch(itemsController.update)
-	.delete(itemsController.destroy)
+	.patch(moviesController.update)
+	.delete(moviesController.destroy)
 
 router.route('/logout').all(logout)
 
