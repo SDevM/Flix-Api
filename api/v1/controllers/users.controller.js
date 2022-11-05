@@ -1,7 +1,6 @@
 const userModel = require('../../../lib/db/models/user.model')
 const JSONResponse = require('../../../lib/json.helper')
 const JWTHelper = require('../../../lib/jwt.helper')
-const S3Helper = require('../../../lib/s3.helper')
 
 class controller {
 	/**
@@ -58,9 +57,6 @@ class controller {
 	 */
 	static async signUp(req, res) {
 		const body = req.body
-		const now = Date.now().toString(16)
-		const manageupload = await S3Helper.upload(req.file, now)
-		if (manageupload) body.profile_pic = { key: now, link: manageupload.Location }
 		const new_user = new userModel(body)
 		const valResult = await new_user.validate().catch((err) => {
 			JSONResponse.error(
