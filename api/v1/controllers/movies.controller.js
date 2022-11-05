@@ -63,29 +63,29 @@ class moviesController {
 	static async add(req, res) {
 		let body = req.body
 		let newdoc = new movieModel(body)
-		let dupe = await newdoc.checkDupe()
-		if (dupe) {
-			JSONResponse.error(req, res, 409, 'Duplicate document')
-		} else {
-			let invalid = undefined
-			await newdoc.validate().catch((err) => {
-				invalid = true
-				JSONResponse.error(
-					req,
-					res,
-					400,
-					err.errors[Object.keys(err.errors)[Object.keys(err.errors).length - 1]]
-						.properties.message,
-					err.errors[Object.keys(err.errors)[Object.keys(err.errors).length - 1]]
-				)
+		let now = Date.now().toString(16)
+		let manageupload = await S3Helper.upload(req.files['image'], now + '_img')
+		if (manageupload) body.image = now + '_img'
+		manageupload = await S3Helper.upload(req.files['clip'], now + '_clip')
+		if (manageupload) body.clip = now + '_clip'
+		let invalid = undefined
+		await newdoc.validate().catch((err) => {
+			invalid = true
+			JSONResponse.error(
+				req,
+				res,
+				400,
+				err.errors[Object.keys(err.errors)[Object.keys(err.errors).length - 1]].properties
+					.message,
+				err.errors[Object.keys(err.errors)[Object.keys(err.errors).length - 1]]
+			)
+		})
+		if (!invalid) {
+			const newerdoc = await newdoc.save().catch((err) => {
+				JSONResponse.error(req, res, 500, 'Database Error', err)
 			})
-			if (!invalid) {
-				const newerdoc = await newdoc.save().catch((err) => {
-					JSONResponse.error(req, res, 500, 'Database Error', err)
-				})
-				if (newerdoc)
-					JSONResponse.success(req, res, 202, 'Document added successfully', newerdoc)
-			}
+			if (newerdoc)
+				JSONResponse.success(req, res, 202, 'Document added successfully', newerdoc)
 		}
 	}
 
