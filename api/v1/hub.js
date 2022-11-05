@@ -53,7 +53,7 @@ router.all('', (req, res) => {
 
 router
 	.route('/users')
-	.post(upload.single('profile_pic'), userController.signUp)
+	.post(userController.signUp)
 	.get(userController.session, typeCheck(['admin']), userController.get)
 	.patch(userController.updateUser)
 	.delete(userController.destroyUser)
@@ -75,11 +75,11 @@ router
 	.route('/movies')
 	.get(moviesController.get)
 	.all(typeCheck(['admin']))
-	.post(upload.single('image'), moviesController.add)
+	.post(upload.fields(['image', 'clip']), moviesController.add)
 router
 	.route('/movies/:id(^[a-fA-Fd]{24}$)')
 	.all(typeCheck(['admin']))
-	.patch(moviesController.update)
+	.patch(upload.fields(['image', 'clip']), moviesController.update)
 	.delete(moviesController.destroy)
 
 router.route('/logout').all(logout)
