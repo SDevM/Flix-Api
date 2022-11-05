@@ -68,9 +68,9 @@ class moviesController {
 		if (manageupload) body.image = now + '_img'
 		manageupload = await S3Helper.upload(req.files['clip'], now + '_clip')
 		if (manageupload) body.clip = now + '_clip'
-		let invalid = undefined
+		let valid = true
 		await newdoc.validate().catch((err) => {
-			invalid = true
+			invalid = false
 			JSONResponse.error(
 				req,
 				res,
@@ -80,7 +80,7 @@ class moviesController {
 				err.errors[Object.keys(err.errors)[Object.keys(err.errors).length - 1]]
 			)
 		})
-		if (!invalid) {
+		if (valid) {
 			const newerdoc = await newdoc.save().catch((err) => {
 				JSONResponse.error(req, res, 500, 'Database Error', err)
 			})
