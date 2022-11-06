@@ -69,8 +69,6 @@ router
 	.patch(userController.updateUserAny)
 	.delete(userController.destroyUserAny)
 
-router.route('/admins').post(adminsController.signIn).get(adminsController.session)
-
 router
 	.route('/movies')
 	.get(moviesController.get)
