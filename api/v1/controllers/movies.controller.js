@@ -31,7 +31,7 @@ class moviesController {
 			if (list && list.length > 0) {
 				let subArray = list.slice(indexStart, indexStart + limit)
 				JSONResponse.success(req, res, 200, 'Collected matching documents', subArray)
-			} else JSONResponse.error(req, res, 404, 'Could not find any matching documents')
+			} else JSONResponse.error(req, res, 200, 'Could not find any matching documents')
 		} else {
 			JSONResponse.error(req, res, 501, 'Incorrect query string')
 			return
