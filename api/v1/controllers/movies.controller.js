@@ -16,7 +16,7 @@ class moviesController {
 			let bucket = Math.floor((page * limit) / 100)
 			let indexStart = (page * limit) % 100
 			let filterBody = {}
-			if (field.length == value.length) {
+			if (field && value && field.length == value.length) {
 				field.forEach((e, index) => {
 					filterBody[e] = value[index]
 				})
