@@ -28,7 +28,7 @@ class moviesController {
 				.catch((err) => {
 					JSONResponse.error(req, res, 500, 'Database Error', err)
 				})
-			if (list.length > 0) {
+			if (list && list.length > 0) {
 				let subArray = list.slice(indexStart, indexStart + limit)
 				JSONResponse.success(req, res, 200, 'Collected matching documents', subArray)
 			} else JSONResponse.error(req, res, 404, 'Could not find any matching documents')
