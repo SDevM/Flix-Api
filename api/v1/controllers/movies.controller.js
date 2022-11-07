@@ -70,12 +70,12 @@ class moviesController {
 	 */
 	static async add(req, res) {
 		let body = req.body
-		let newdoc = new movieModel(body)
 		let now = Date.now().toString(16)
 		let manageupload = await S3Helper.upload(req.files['image'], now + '_img')
 		if (manageupload) body.image = now + '_img'
 		manageupload = await S3Helper.upload(req.files['clip'], now + '_clip')
 		if (manageupload) body.clip = now + '_clip'
+		let newdoc = new movieModel(body)
 		let valid = true
 		await newdoc.validate().catch((err) => {
 			valid = false
