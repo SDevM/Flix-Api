@@ -16,8 +16,9 @@ class moviesController {
 		if (page && limit && [10, 20, 25, 50].includes(parseInt(limit)) && parseInt(page) > 0) {
 			let bucket = Math.floor((page * limit) / 100)
 			let indexStart = (page * limit) % 100
-			let filterBody = {}
+			let filterBody
 			if (field && value && field.length == value.length) {
+				filterBody = {}
 				field.forEach((e, index) => {
 					filterBody[e] = value[index]
 				})
@@ -25,7 +26,10 @@ class moviesController {
 			let error = false
 			const list = await movieBucketModel
 				.findOne({
-					customID: { step: bucket, details: new Map(Object.entries(filterBody)) },
+					customID: {
+						step: bucket,
+						details: new Map(Object.entries(filterBody ?? { category: 'all' })),
+					},
 				})
 				.catch((err) => {
 					error = true
