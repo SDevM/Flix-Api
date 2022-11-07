@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const multer = require('multer')
+const categoryModel = require('../../lib/db/models/category.model')
 const JSONResponse = require('../../lib/json.helper')
 const S3Helper = require('../../lib/s3.helper')
 const moviesController = require('./controllers/movies.controller')
@@ -80,6 +81,15 @@ router
 		moviesController.update
 	)
 	.delete(moviesController.destroy)
+
+router.route('/categories').get(async (req, res) => {
+	let categories = await categoryModel.find().catch.catch((err) => {
+		JSONResponse.error(req, res, 500, 'Database Error', err)
+	})
+	if (categories && categories.length > 0)
+		JSONResponse.success(req, res, 200, 'Collected matching documents', categories)
+	else JSONResponse.success(req, res, 200, 'Could not find any matching documents')
+})
 
 router.route('/logout').all(logout)
 
