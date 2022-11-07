@@ -71,7 +71,6 @@ router
 router
 	.route('/movies')
 	.get(moviesController.get)
-	.all(typeCheck(['admin']))
 	.post(upload.fields(['image', 'clip']), moviesController.add)
 router
 	.route('/movies/:id(^[a-fA-Fd]{24}$)')
