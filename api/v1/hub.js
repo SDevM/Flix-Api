@@ -71,11 +71,14 @@ router
 router
 	.route('/movies')
 	.get(moviesController.get)
-	.post(upload.fields(['image', 'clip']), moviesController.add)
+	.post(upload.fields([{ name: 'image' }, { name: 'clip', maxCount: 1 }]), moviesController.add)
 router
 	.route('/movies/:id(^[a-fA-Fd]{24}$)')
 	.all(typeCheck(['admin']))
-	.patch(upload.fields(['image', 'clip']), moviesController.update)
+	.patch(
+		upload.fields([{ name: 'image' }, { name: 'clip', maxCount: 1 }]),
+		moviesController.update
+	)
 	.delete(moviesController.destroy)
 
 router.route('/logout').all(logout)
