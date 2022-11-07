@@ -83,7 +83,7 @@ router
 	.delete(moviesController.destroy)
 
 router.route('/categories').get(async (req, res) => {
-	let categories = await categoryModel.find().catch.catch((err) => {
+	let categories = await categoryModel.find().catch((err) => {
 		JSONResponse.error(req, res, 500, 'Database Error', err)
 	})
 	if (categories && categories.length > 0)
