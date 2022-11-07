@@ -1,6 +1,7 @@
 const movieBucketModel = require('../../../lib/db/models/movie.bucket.model')
 const movieModel = require('../../../lib/db/models/movie.model')
 const JSONResponse = require('../../../lib/json.helper')
+const S3Helper = require('../../../lib/s3.helper')
 
 class moviesController {
 	// TODO Research into populate, in order to fill movie references in the bucket
