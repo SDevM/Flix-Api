@@ -74,7 +74,7 @@ class moviesController {
 		if (manageupload) body.clip = now + '_clip'
 		let valid = true
 		await newdoc.validate().catch((err) => {
-			invalid = false
+			valid = false
 			JSONResponse.error(
 				req,
 				res,
