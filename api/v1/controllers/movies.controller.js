@@ -21,17 +21,20 @@ class moviesController {
 					filterBody[e] = value[index]
 				})
 			}
+			let error = false
 			const list = await movieBucketModel
 				.findOne({
 					customID: { step: bucket, details: new Map(Object.entries(filterBody)) },
 				})
 				.catch((err) => {
+					error = true
 					JSONResponse.error(req, res, 500, 'Database Error', err)
 				})
-			if (list && list.length > 0) {
+			if (list) {
 				let subArray = list.slice(indexStart, indexStart + limit)
 				JSONResponse.success(req, res, 200, 'Collected matching documents', subArray)
-			} else JSONResponse.error(req, res, 200, 'Could not find any matching documents')
+			} else if (!list && !error)
+				JSONResponse.success(req, res, 200, 'Could not find any matching documents')
 		} else {
 			JSONResponse.error(req, res, 501, 'Incorrect query string')
 			return

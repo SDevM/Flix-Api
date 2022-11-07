@@ -24,7 +24,7 @@ class controller {
 			.then((results) => {
 				if (results.length > 0)
 					JSONResponse.success(req, res, 200, 'Collected matching users', results)
-				else JSONResponse.error(req, res, 404, 'Could not find any users')
+				else JSONResponse.success(req, res, 200, 'Could not find any users')
 			})
 			.catch((err) => {
 				JSONResponse.error(req, res, 500, 'Fatal error handling user model', err)
