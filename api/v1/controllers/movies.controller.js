@@ -75,6 +75,7 @@ class moviesController {
 		if (manageupload) body.image = now + '_img'
 		manageupload = await S3Helper.upload(req.files['clip'], now + '_clip')
 		if (manageupload) body.clip = now + '_clip'
+		body.categories.push('6369a13a274f9c5d48860101')
 		let newdoc = new movieModel(body)
 		let valid = true
 		await newdoc.validate().catch((err) => {
