@@ -78,7 +78,6 @@ class moviesController {
 		let newdoc = new movieModel(body)
 		let valid = true
 		await newdoc.validate().catch((err) => {
-			console.log(err.errors[Object.keys(err.errors)[Object.keys(err.errors).length - 1]])
 			valid = false
 			JSONResponse.error(
 				req,
