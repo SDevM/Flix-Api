@@ -106,7 +106,7 @@ router.route('/s3/:key').get(async (req, res) => {
 		JSONResponse.error(req, res, 500, 'Failed to communicate with file storage')
 	})
 	let responseFile = await bufferToStream(file.buffer)
-	console.log(responseFile)
+	console.log(file.buffer)
 	if (file) responseFile.pipe(res)
 	else JSONResponse.error(req, res, 404, 'File not found')
 })
