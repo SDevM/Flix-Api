@@ -16,24 +16,23 @@ class moviesController {
 		if (page && limit && [10, 20, 25, 50].includes(parseInt(limit)) && parseInt(page) > 0) {
 			let bucketnum = Math.floor((page * limit) / 100) + 1
 			let indexStart = ((page - 1) * limit) % 100
-			let filterBody
+			let filterBody = {
+				'customID.step': bucketnum,
+			}
 			if (field && value && field.length == value.length) {
-				filterBody = {}
 				field.forEach((e, index) => {
-					filterBody[e] = value[index]
+					filterBody[`customID.${e}`] = value[index]
 				})
+			} else {
+				filterBody['customID.category'] = '6369a13a274f9c5d48860101'
 			}
 			let error = false
-			const bucket = await movieBucketModel
-				.findOne({
-					'customID.step': bucketnum,
-					'customID.details': filterBody ?? { category: '6369a13a274f9c5d48860101' },
-				})
-				.catch((err) => {
-					error = true
-					JSONResponse.error(req, res, 500, 'Database Error', err)
-				})
+			const bucket = await movieBucketModel.findOne(filterBody).catch((err) => {
+				error = true
+				JSONResponse.error(req, res, 500, 'Database Error', err)
+			})
 			if (bucket) {
+				bucket.populate('mvoies')
 				let subArray = bucket.bucket.slice(indexStart, indexStart + limit)
 				JSONResponse.success(req, res, 200, 'Collected matching documents', subArray)
 			} else if (!bucket && !error)
