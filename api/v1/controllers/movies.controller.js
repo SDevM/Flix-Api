@@ -79,6 +79,7 @@ class moviesController {
 		else if (body.categories)
 			body.categories = ['6369a13a274f9c5d48860101'].push(body.categories)
 		else body.categories = ['6369a13a274f9c5d48860101']
+		console.log(body)
 		let newdoc = new movieModel(body)
 		let valid = true
 		await newdoc.validate().catch((err) => {
