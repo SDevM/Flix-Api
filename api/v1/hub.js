@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const multer = require('multer')
+const fs = require('fs')
 const categoryModel = require('../../lib/db/models/category.model')
 const JSONResponse = require('../../lib/json.helper')
 const S3Helper = require('../../lib/s3.helper')
@@ -7,6 +8,7 @@ const moviesController = require('./controllers/movies.controller')
 const upload = multer()
 const userController = require('./controllers/users.controller')
 const typeCheck = require('./middleware/typeCheck.middleware')
+const { bufferToStream } = require('../../lib/converters.helper')
 
 /**
  * Generates the API Docs from the list of routes in the system and attaches descriptions to them
@@ -103,7 +105,8 @@ router.route('/s3/:key').get(async (req, res) => {
 		console.error(err)
 		JSONResponse.error(req, res, 500, 'Failed to communicate with file storage')
 	})
-	console.log(file)
+	let responseFile = await bufferToStream(file.buffer)
+	console.log(responseFile)
 	if (file) res.send(file)
 	else JSONResponse.error(req, res, 404, 'File not found')
 })
