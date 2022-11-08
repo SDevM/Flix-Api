@@ -14,7 +14,7 @@ class moviesController {
 	static async get(req, res) {
 		let { page, limit, field, value } = req.query
 		if (page && limit && [10, 20, 25, 50].includes(parseInt(limit)) && parseInt(page) > 0) {
-			let bucketnum = Math.floor((page * limit) / 100)
+			let bucketnum = Math.floor((page * limit) / 100) + 1
 			let indexStart = ((page - 1) * limit) % 100
 			let filterBody
 			if (field && value && field.length == value.length) {
