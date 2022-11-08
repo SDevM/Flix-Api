@@ -26,10 +26,8 @@ class moviesController {
 			let error = false
 			const bucket = await movieBucketModel
 				.findOne({
-					customID: {
-						step: bucketnum,
-						details: filterBody ?? { category: '6369a13a274f9c5d48860101' },
-					},
+					'customID.step': bucketnum,
+					'customID.details': filterBody ?? { category: '6369a13a274f9c5d48860101' },
 				})
 				.catch((err) => {
 					error = true
