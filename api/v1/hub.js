@@ -9,6 +9,7 @@ const upload = multer()
 const userController = require('./controllers/users.controller')
 const typeCheck = require('./middleware/typeCheck.middleware')
 const { bufferToStream } = require('../../lib/converters.helper')
+const { log } = require('console')
 
 /**
  * Generates the API Docs from the list of routes in the system and attaches descriptions to them
@@ -106,7 +107,8 @@ router.route('/s3/:key').get(async (req, res) => {
 		JSONResponse.error(req, res, 500, 'Failed to communicate with file storage')
 	})
 	let responseFile = await bufferToStream(file.body)
-	if (file) responseFile.pipe(res)
+	console.log(responseFile)
+	if (file) res.write(responseFile)
 	else JSONResponse.error(req, res, 404, 'File not found')
 })
 
