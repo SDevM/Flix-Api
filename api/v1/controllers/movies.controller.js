@@ -28,7 +28,9 @@ class moviesController {
 				.findOne({
 					customID: {
 						step: bucket,
-						details: new Map(Object.entries(filterBody ?? { category: 'all' })),
+						details: new Map(
+							Object.entries(filterBody ?? { category: '6369a13a274f9c5d48860101' })
+						),
 					},
 				})
 				.catch((err) => {
