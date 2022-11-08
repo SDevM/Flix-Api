@@ -14,8 +14,8 @@ class moviesController {
 	static async get(req, res) {
 		let { page, limit, field, value } = req.query
 		if (page && limit && [10, 20, 25, 50].includes(parseInt(limit)) && parseInt(page) > 0) {
-			let bucket = Math.floor((page * limit) / 100)
-			let indexStart = (page * limit) % 100
+			let bucketnum = Math.floor((page * limit) / 100)
+			let indexStart = ((page - 1) * limit) % 100
 			let filterBody
 			if (field && value && field.length == value.length) {
 				filterBody = {}
@@ -24,10 +24,10 @@ class moviesController {
 				})
 			}
 			let error = false
-			const list = await movieBucketModel
+			const bucket = await movieBucketModel
 				.findOne({
 					customID: {
-						step: bucket,
+						step: bucketnum,
 						details: new Map(
 							Object.entries(filterBody ?? { category: '6369a13a274f9c5d48860101' })
 						),
@@ -37,10 +37,10 @@ class moviesController {
 					error = true
 					JSONResponse.error(req, res, 500, 'Database Error', err)
 				})
-			if (list) {
-				let subArray = list.slice(indexStart, indexStart + limit)
+			if (bucket) {
+				let subArray = bucket.bucket.slice(indexStart, indexStart + limit)
 				JSONResponse.success(req, res, 200, 'Collected matching documents', subArray)
-			} else if (!list && !error)
+			} else if (!bucket && !error)
 				JSONResponse.success(req, res, 200, 'Could not find any matching documents')
 		} else {
 			JSONResponse.error(req, res, 501, 'Incorrect query string')
@@ -80,7 +80,6 @@ class moviesController {
 		if (Array.isArray(body.categories)) body.categories.push('6369a13a274f9c5d48860101')
 		else if (body.categories) body.categories = ['6369a13a274f9c5d48860101', body.categories]
 		else body.categories = ['6369a13a274f9c5d48860101']
-		console.log(body)
 		let newdoc = new movieModel(body)
 		let valid = true
 		await newdoc.validate().catch((err) => {
