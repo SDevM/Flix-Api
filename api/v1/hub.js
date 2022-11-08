@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const multer = require('multer')
-const fs = require('fs')
 const categoryModel = require('../../lib/db/models/category.model')
 const JSONResponse = require('../../lib/json.helper')
 const S3Helper = require('../../lib/s3.helper')
@@ -9,7 +8,6 @@ const upload = multer()
 const userController = require('./controllers/users.controller')
 const typeCheck = require('./middleware/typeCheck.middleware')
 const { bufferToStream } = require('../../lib/converters.helper')
-const { log } = require('console')
 
 /**
  * Generates the API Docs from the list of routes in the system and attaches descriptions to them
@@ -74,6 +72,7 @@ router
 
 router
 	.route('/movies')
+	.all(typeCheck(['user', 'admin']))
 	.get(moviesController.get)
 	.post(upload.fields([{ name: 'image' }, { name: 'clip', maxCount: 1 }]), moviesController.add)
 router
@@ -100,8 +99,7 @@ router.route('/categories').get(async (req, res) => {
 
 router.route('/logout').all(logout)
 
-// router.route('/s3/:key').get(typeCheck(['user', 'admin']), async (req, res) => {
-router.route('/s3/:key').get(async (req, res) => {
+router.route('/s3/:key').get(typeCheck(['user', 'admin']), async (req, res) => {
 	let file = await S3Helper.download(req.params.key).catch((err) => {
 		console.error(err)
 		JSONResponse.error(req, res, 500, 'Failed to communicate with file storage')
