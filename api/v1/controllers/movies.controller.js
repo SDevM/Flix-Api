@@ -69,6 +69,7 @@ class moviesController {
 	static async add(req, res) {
 		let body = req.body
 		let now = Date.now().toString(16)
+		console.log(req.files)
 		let manageupload = await S3Helper.upload(req.files['image'], now + '_img')
 		if (manageupload) body.image = now + '_img'
 		manageupload = await S3Helper.upload(req.files['clip'], now + '_clip')
