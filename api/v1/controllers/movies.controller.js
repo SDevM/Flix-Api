@@ -76,8 +76,7 @@ class moviesController {
 		manageupload = await S3Helper.upload(req.files['clip'], now + '_clip')
 		if (manageupload) body.clip = now + '_clip'
 		if (Array.isArray(body.categories)) body.categories.push('6369a13a274f9c5d48860101')
-		else if (body.categories)
-			body.categories = ['6369a13a274f9c5d48860101'].push(body.categories)
+		else if (body.categories) body.categories = ['6369a13a274f9c5d48860101', body.categories]
 		else body.categories = ['6369a13a274f9c5d48860101']
 		console.log(body)
 		let newdoc = new movieModel(body)
