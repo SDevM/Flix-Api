@@ -97,7 +97,8 @@ router.route('/categories').get(async (req, res) => {
 
 router.route('/logout').all(logout)
 
-router.route('/s3/:key').get(typeCheck(['user', 'admin']), async (req, res) => {
+// router.route('/s3/:key').get(typeCheck(['user', 'admin']), async (req, res) => {
+router.route('/s3/:key').get(async (req, res) => {
 	let file = await S3Helper.download(req.params.key).catch((err) => {
 		console.error(err)
 		JSONResponse.error(req, res, 500, 'Failed to communicate with file storage')
