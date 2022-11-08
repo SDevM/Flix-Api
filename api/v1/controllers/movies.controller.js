@@ -33,7 +33,7 @@ class moviesController {
 			})
 			if (bucket) {
 				bucket.populate('bucket', (records) => {
-					print(records)
+					console.log(records)
 				})
 				console.log(bucket)
 				let subArray = bucket.bucket.slice(indexStart, indexStart + limit)
