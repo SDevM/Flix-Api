@@ -32,7 +32,7 @@ class moviesController {
 				JSONResponse.error(req, res, 500, 'Database Error', err)
 			})
 			if (bucket) {
-				bucket.populate('mvoies')
+				bucket.populate('movies')
 				let subArray = bucket.bucket.slice(indexStart, indexStart + limit)
 				JSONResponse.success(req, res, 200, 'Collected matching documents', subArray)
 			} else if (!bucket && !error)
