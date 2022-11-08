@@ -33,6 +33,7 @@ class moviesController {
 			})
 			if (bucket) {
 				bucket.populate('bucket')
+				console.log(bucket)
 				let subArray = bucket.bucket.slice(indexStart, indexStart + limit)
 				JSONResponse.success(req, res, 200, 'Collected matching documents', subArray)
 			} else if (!bucket && !error)
