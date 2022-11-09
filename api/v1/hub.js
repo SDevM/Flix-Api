@@ -78,6 +78,7 @@ router
 	.post(upload.fields([{ name: 'image' }, { name: 'clip', maxCount: 1 }]), moviesController.add)
 router
 	.route('/movies/:id(^[a-fA-Fd]{24}$)')
+	.get(moviesController.getOne)
 	.all(typeCheck(['admin']))
 	.patch(
 		upload.fields([{ name: 'image' }, { name: 'clip', maxCount: 1 }]),
