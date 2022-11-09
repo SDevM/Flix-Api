@@ -39,10 +39,16 @@ router.all('', (req, res) => {
 		GET any user by ID
 		PATCH any user by ID
 		DELETE any user by ID`,
-		`Route for managing logins and session resumption for admins.`,
-		`Route for collecting all movies or (admin)creating an item.`,
-		`Administrative management of movies via IDs.`,
-		`Destroy the session and thereby log-out.`,
+		`Manage movies as a CRUD collection where an ID is not needed.
+		POST to create a new movie
+		GET to seek movies with pagination and optional filtering`,
+		`Manage movies as a CRUD collection where an ID is needed.
+		GET to get one movie by ID
+		PATCH to update any movie (admin)
+		DELETE to delete any movie (admin)`,
+		`GET Categories`,
+		`Destroy the session and thereby log-out`,
+		`Access S3 stored files`,
 	]
 	let body = {
 		name: 'BasicAPI v1',
@@ -62,10 +68,10 @@ router
 
 router.all('/users/login', userController.signIn)
 
-router.all('/users/verify/:id(^[a-fA-F\d]{24}$)', userController.verifyUser)
+router.all(/^\/users\/verify\/:id([a-fA-F\d]{24})$/, userController.verifyUser)
 
 router
-	.route('/users/:id(^[a-fA-F\d]{24}$)')
+	.route(/^\/users\/:id([a-fA-F\d]{24})$/)
 	.all(typeCheck(['admin']))
 	.get(userController.getId)
 	.patch(userController.updateUserAny)
@@ -77,7 +83,7 @@ router
 	.get(moviesController.get)
 	.post(upload.fields([{ name: 'image' }, { name: 'clip', maxCount: 1 }]), moviesController.add)
 router
-	.route('/movies/:id(^[a-fA-F\d]{24}$)')
+	.route(/^\/movies\/:id([a-fA-F\d]{24})$/)
 	.get(moviesController.getOne)
 	.all(typeCheck(['admin']))
 	.patch(
