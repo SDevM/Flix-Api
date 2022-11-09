@@ -93,14 +93,12 @@ router
 	.delete(moviesController.destroy)
 
 router.route('/categories').get(async (req, res) => {
-	let categories = await categoryModel.find().catch((err) => {
-		JSONResponse.error(req, res, 500, 'Database Error', err)
-	})
+	let categories = await categoryModel
+		.find({ _id: { $ne: '6369a13a274f9c5d48860101' } })
+		.catch((err) => {
+			JSONResponse.error(req, res, 500, 'Database Error', err)
+		})
 	if (categories && categories.length > 0) {
-		const index = categories.indexOf('6369a13a274f9c5d48860101')
-		if (index > -1) {
-			categories.splice(index, 1)
-		}
 		JSONResponse.success(req, res, 200, 'Collected matching documents', categories)
 	} else JSONResponse.success(req, res, 200, 'Could not find any matching documents')
 })
