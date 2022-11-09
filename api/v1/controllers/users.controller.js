@@ -115,7 +115,7 @@ class controller {
 	 * @param {import('express').Response} res
 	 */
 	static async session(req, res, next) {
-		if (req.query == {}) {
+		if (Object.keys(req.query).length == 0) {
 			const decoded = JWTHelper.getToken(req, res, 'jwt_auth')
 			if (decoded && decoded.type == 1) {
 				const user = await userModel.findById(decoded.self).catch((err) => {
