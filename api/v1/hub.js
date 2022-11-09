@@ -8,6 +8,7 @@ const upload = multer()
 const userController = require('./controllers/users.controller')
 const typeCheck = require('./middleware/typeCheck.middleware')
 const { bufferToStream } = require('../../lib/converters.helper')
+const JWTHelper = require('../../lib/jwt.helper')
 
 /**
  * Generates the API Docs from the list of routes in the system and attaches descriptions to them
@@ -106,7 +107,7 @@ router.route('/s3/:key').get(typeCheck(['user', 'admin']), async (req, res) => {
 	})
 	let responseStream = bufferToStream(file.Body)
 	if (file) {
-		responseStream.pipe(res,)
+		responseStream.pipe(res)
 	} else JSONResponse.error(req, res, 404, 'File not found')
 })
 
