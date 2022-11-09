@@ -68,10 +68,10 @@ router
 
 router.all('/users/login', userController.signIn)
 
-router.all('/users/verify/:id([a-fA-F\d]{24})', userController.verifyUser)
+router.all('/users/verify/:id([a-fA-F\\d]{24})', userController.verifyUser)
 
 router
-	.route('/users/:id([a-fA-F\d]{24})')
+	.route('/users/:id([a-fA-Fd]{24})')
 	.all(typeCheck(['admin']))
 	.get(userController.getId)
 	.patch(userController.updateUserAny)
@@ -83,7 +83,7 @@ router
 	.get(moviesController.get)
 	.post(upload.fields([{ name: 'image' }, { name: 'clip', maxCount: 1 }]), moviesController.add)
 router
-	.route('/movies/:id([a-fA-F\d]{24})')
+	.route('/movies/:id([a-fA-F\\d]{24})')
 	.get(moviesController.getOne)
 	.all(typeCheck(['admin']))
 	.patch(
