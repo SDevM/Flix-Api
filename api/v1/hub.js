@@ -106,7 +106,7 @@ router.route('/s3/:key').get(typeCheck(['user', 'admin']), async (req, res) => {
 	})
 	let responseStream = bufferToStream(file.Body)
 	if (file) {
-		responseStream.pipe(res)
+		await responseStream.pipe(res)
 		res.end()
 	} else JSONResponse.error(req, res, 404, 'File not found')
 })
