@@ -105,8 +105,10 @@ router.route('/s3/:key').get(typeCheck(['user', 'admin']), async (req, res) => {
 		JSONResponse.error(req, res, 500, 'Failed to communicate with file storage')
 	})
 	let responseStream = bufferToStream(file.Body)
-	if (file) responseStream.pipe(res)
-	else JSONResponse.error(req, res, 404, 'File not found')
+	if (file) {
+		responseStream.pipe(res)
+		res.end()
+	} else JSONResponse.error(req, res, 404, 'File not found')
 })
 
 module.exports = router
