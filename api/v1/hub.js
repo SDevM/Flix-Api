@@ -28,23 +28,23 @@ router.all('', (req, res) => {
 	}
 	const descriptions = [
 		`API DOCS URL`,
-		`Manage users as a CRUD collection where an ID is not needed.
-		POST to Sign Up
-		GET to validate a session or (admin) Get users as CRUD collection with pagination and filtration
-		PATCH to update the current user
-		DELETE to delete the current user`,
+		`Manage users as a CRUD collection where an ID is not needed.\n
+			POST to Sign Up\n
+			GET to validate a session or (admin) Get users as CRUD collection with pagination and filtration\n
+			PATCH to update the current user\n
+			DELETE to delete the current user`,
 		`Logs a user in.`,
 		`Verification route for a newly registered account.`,
-		`Administrative management of users as a CRUD collection via IDs.
-		GET any user by ID
-		PATCH any user by ID
+		`Administrative management of users as a CRUD collection via IDs.\n
+		GET any user by ID\n
+		PATCH any user by ID\n
 		DELETE any user by ID`,
-		`Manage movies as a CRUD collection where an ID is not needed.
-		POST to create a new movie
+		`Manage movies as a CRUD collection where an ID is not needed.\n
+		POST to create a new movie\n
 		GET to seek movies with pagination and optional filtering`,
-		`Manage movies as a CRUD collection where an ID is needed.
-		GET to get one movie by ID
-		PATCH to update any movie (admin)
+		`Manage movies as a CRUD collection where an ID is needed.\n
+		GET to get one movie by ID\n
+		PATCH to update any movie (admin)\n
 		DELETE to delete any movie (admin)`,
 		`GET Categories`,
 		`Destroy the session and thereby log-out`,
@@ -81,7 +81,14 @@ router
 	.route('/movies')
 	.all(typeCheck(['user', 'admin']))
 	.get(moviesController.get)
-	.post(upload.fields([{ name: 'image' }, { name: 'clip', maxCount: 1 }]), moviesController.add)
+	.post(
+		upload.fields([
+			{ name: 'image', maxCount: 1 },
+			{ name: 'clip', maxCount: 1 },
+		]),
+		moviesController.add
+	)
+router.route('/movies/search').all(moviesController.getSearch)
 router
 	.route('/movies/:id([a-fA-F\\d]{24})')
 	.get(moviesController.getOne)

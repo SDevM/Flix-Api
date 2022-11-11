@@ -58,6 +58,29 @@ class moviesController {
 		} else JSONResponse.error(req, res, 404, 'Could not find any matching documents')
 	}
 
+	/**
+	 * Search movies with a string
+	 * @param {import('express').Request} req
+	 * @param {import('express').Response} res
+	 */
+	static async getSearch(req, res) {
+		let { search, limit } = req.query
+		let searches = search.split(' ')
+		searches.forEach((e) => {
+			e = `(${e})?`
+		})
+		let searchRegex = searches.join('')
+		let movies = await movieModel
+			.find({ title: { $regex: new RegExp(searchRegex) } })
+			.limit(limit)
+			.catch((err) => {
+				JSONResponse.error(req, res, 500, 'Database Error', err)
+			})
+		if (movies && movies.length > 0) {
+			JSONResponse.success(req, res, 200, 'Collected matching document', movie)
+		} else JSONResponse.error(req, res, 404, 'Could not find any matching documents')
+	}
+
 	// TODO Include buckets interactions
 	//Create
 	/**
